@@ -1,0 +1,79 @@
+swagger: "2.0"
+info:
+  description: "API definition for interactive CV"
+  version: "1.0.0"
+  title: "Interactive CV"
+  contact:
+    email: "damian.ea@gmail.com"
+host: "insdami.github.io"
+basePath: "/v2"
+tags:
+- name: "commands"
+  description: "All the available commands"
+schemes:
+- "https"
+- "http"
+paths:
+  /commands:
+    get:
+      tags:
+      - "commands"
+      summary: "Lists all the available"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Command"
+      security:
+      - JWT: []
+      
+  /commands/{commandId}:
+    get:
+      tags:
+      - "commands"
+      summary: "Produces the command response described in the command itself"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "commandId"
+        in: "path"
+        description: "ID of command to execute"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/CommandResponse"
+        "404":
+          description: "Command not found"
+      security:
+      - JWT: []
+
+securityDefinitions:
+  JWT:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+
+definitions:
+  Command:
+    type: "object"
+    properties:
+      commandId:
+        type: "string"
+      description:
+        type: "string"
+      uri:
+        type: "string"
+  CommandResponse:
+    type: "object"
+    properties:
+      commandId:
+        type: "string"
+      body:
+        type: "string"

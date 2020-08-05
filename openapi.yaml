@@ -1,0 +1,77 @@
+openapi: 3.0.1
+info:
+  title: Interactive CV
+  description: API definition for interactive CV
+  contact:
+    email: damian.ea@gmail.com
+  version: 1.0.0
+servers:
+- url: https://insdami.github.io/v2
+- url: http://insdami.github.io/v2
+tags:
+- name: commands
+  description: All the available commands
+paths:
+  /commands:
+    get:
+      tags:
+      - commands
+      summary: Lists all the available
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Command'
+      security:
+      - JWT: []
+  /commands/{commandId}:
+    get:
+      tags:
+      - commands
+      summary: Produces the command response described in the command itself
+      parameters:
+      - name: commandId
+        in: path
+        description: ID of command to execute
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommandResponse'
+        404:
+          description: Command not found
+          content: {}
+      security:
+      - JWT: []
+components:
+  schemas:
+    Command:
+      type: object
+      properties:
+        commandId:
+          type: string
+        description:
+          type: string
+        uri:
+          type: string
+    CommandResponse:
+      type: object
+      properties:
+        commandId:
+          type: string
+        body:
+          type: string
+  securitySchemes:
+    JWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
